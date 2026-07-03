@@ -1,3 +1,16 @@
+- name: Install attacker tools
+  apt:
+    name:
+      - wireshark
+      - tcpdump
+      - arping
+      - net-tools
+      - iproute2
+      - curl
+      - nmap
+    state: present
+    update_cache: true
+
 - name: Configure network
   copy:
     dest: /etc/network/interfaces
