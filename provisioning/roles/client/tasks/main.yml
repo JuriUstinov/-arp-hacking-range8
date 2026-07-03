@@ -23,10 +23,19 @@
       allow-hotplug enp0s3
       iface enp0s3 inet dhcp
 
-      allow-hotplug enp0s8
-      iface enp0s8 inet static
+      # Auf eth1 geändert und auf 'auto' gesetzt
+      auto eth1
+      iface eth1 inet static
       address {{ client_ip }}/24
       hwaddress ether {{ client_mac }}
+  register: network_config
+
+- name: Restart eth1 to apply new MAC address
+  shell: ifdown eth1 && ifup eth1
+  when: network_config.changed
+  async: 10
+  poll: 0
+  ignore_unreachable: true
 
 - name: Configure nftables
   copy:
